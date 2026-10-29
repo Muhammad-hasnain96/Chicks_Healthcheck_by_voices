@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FlockTone — Poultry Vocal Health Monitor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="atmosphere" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <div>
+        <p class="brand-name">FlockTone</p>
+        <p class="brand-tag">Poultry vocal health monitor</p>
+      </div>
+    </div>
+    <div class="status-chip" id="systemStatus">Checking model…</div>
+  </header>
+
+  <main class="shell">
+    <section class="intro">
+      <h1>Listen. Classify. Act early.</h1>
+      <p>
+        Upload a barn recording or connect a microphone. Fans and human talk are
+        ignored — only confirmed hen/chick vocal windows are scored as healthy or unhealthy.
+      </p>
+    </section>
+
+    <div class="mode-switch" role="tablist" aria-label="Input mode">
+      <button class="mode-btn is-active" role="tab" aria-selected="true" data-mode="upload" id="tabUpload">
+        Upload audio
+      </button>
+      <button class="mode-btn" role="tab" aria-selected="false" data-mode="live" id="tabLive">
+        Live microphone
+      </button>
+    </div>
+
+    <div class="workspace">
+      <section class="panel input-panel" id="panelUpload">
+        <h2>Audio upload</h2>
+        <p class="panel-copy">Drop WAV, MP3, FLAC, OGG, or M4A. Long farm clips are scanned across overlapping 3-second windows for multi-bird flock activity.</p>
+
+        <label class="dropzone" id="dropzone" for="fileInput">
+          <input id="fileInput" type="file" accept="audio/*,.wav,.mp3,.flac,.ogg,.m4a" hidden />
+          <span class="drop-icon" aria-hidden="true"></span>
+          <span class="drop-title">Drop a recording here</span>
+          <span class="drop-sub">or click to browse</span>
+        </label>
+
+        <div class="file-meta" id="fileMeta" hidden>
+          <div>
+            <p class="meta-label">Selected file</p>
+            <p class="meta-value" id="fileName">—</p>
+          </div>
+          <button type="button" class="btn ghost" id="clearFile">Clear</button>
+        </div>
+
+        <button type="button" class="btn primary" id="analyzeBtn" disabled>Analyze recording</button>
+      </section>
+
+      <section class="panel input-panel" id="panelLive" hidden>
+        <h2>Live microphone</h2>
+        <p class="panel-copy">Uses your browser mic. Background noise is ignored; health labels appear only when hen/chick voices are detected.</p>
+
+        <div class="mic-stage">
+          <div class="mic-orb" id="micOrb" data-state="idle">
+            <span class="mic-core"></span>
+          </div>
+          <div class="level-meter" aria-hidden="true">
+            <div class="level-fill" id="levelFill"></div>
+          </div>
+          <p class="mic-hint" id="micHint">Microphone idle</p>
+        </div>
+
+        <div class="mic-actions">
+          <button type="button" class="btn primary" id="startMic">Start listening</button>
+          <button type="button" class="btn ghost" id="stopMic" disabled>Stop</button>
+        </div>
+      </section>
+
+      <section class="panel result-panel" aria-live="polite">
+        <div class="result-head">
+          <h2>Result</h2>
+          <span class="stamp" id="resultStamp">Waiting</span>
+        </div>
+
+        <div class="verdict" id="verdict" data-state="idle">
+          <p class="verdict-label" id="verdictLabel">No sample yet</p>
+          <p class="verdict-conf" id="verdictConf">Upload audio or start the microphone</p>
+        </div>
+
+        <div class="bars" id="probBars">
+          <div class="bar-row" data-class="healthy" hidden>
+            <span>Healthy</span>
+            <div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>
+            <strong>0%</strong>
+          </div>
+          <div class="bar-row" data-class="unhealthy" hidden>
+            <span>Unhealthy</span>
+            <div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>
+            <strong>0%</strong>
+          </div>
+          <div class="bar-row" data-class="noise" hidden>
+            <span>Noise</span>
+            <div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>
+            <strong>0%</strong>
+          </div>
+        </div>
+
+        <ul class="history" id="historyList"></ul>
+      </section>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <span>CPU model · 16 kHz · 3 s windows · confidence gate 55%</span>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
